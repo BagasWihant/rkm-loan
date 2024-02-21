@@ -23,8 +23,12 @@ function nextPrev(n) {
   if (n == 1 && !validateForm()) return false;
   x[currentTab].style.display = "none";
   currentTab = currentTab + n;
+  console.log('AA');
   if (currentTab >= x.length) {
-    document.getElementById("regForm").submit();
+    console.log('KKKKS');
+    $(".loader-wrapper").show();  
+    var form = document.getElementById("regForm")
+    form.submit();
     return false;
   }
   showTab(currentTab);
@@ -126,7 +130,6 @@ function formPreview(data) {
   $("#preview_namarel").text(data.get('nama_relasi'))
   $("#preview_alamat_rel").text(data.get('alamat_relasi'))
 
-  console.log(data.get('jenis_nasabah'));
   if (data.get('jenis_nasabah') === '1') {
     $("#keluargatipe").show();
     $("#sahabattipe").hide();

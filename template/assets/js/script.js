@@ -171,7 +171,7 @@
   });
 
   $(".loader-wrapper").fadeOut("slow", function () {
-    $(this).remove();
+    $(this).hide();
   });
 
   $(window).on("scroll", function () {
