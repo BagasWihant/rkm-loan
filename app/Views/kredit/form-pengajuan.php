@@ -262,7 +262,7 @@
                         <div class="card p-3">
                             <h5 class="text-uppercase text-center mb-3">Data Permohonan</h5>
                             <div class="text-capitalize col-md-6"> <span class="d-block mb-0 fw-medium">plafon permohonan kredit : </span>
-                                <p id="preview_plafon" class="text-break text-secondary"></p>
+                               <p>Rp. <span id="preview_plafon" class="text-break text-secondary"></span></p>
                             </div>
                             <div class="text-capitalize col-md-6"> <span class="d-block mb-0 fw-medium">jangka waktu : </span>
                                 <p id="preview_jangka" class="text-break text-secondary"></p>
