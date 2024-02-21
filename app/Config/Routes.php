@@ -44,6 +44,7 @@ $routes->group('kredit', ['filter' => 'auth'], function($routes)
     $routes->get('spv', 'Kredit::spv');
     $routes->get('ao', 'Kredit::ao');
     $routes->get('pengajuan', 'Kredit::pengajuan');
+    $routes->post('pengajuan/save', 'Kredit::pengajuan_action');
     $routes->get('editpengajuan', 'Kredit::editpengajuan');
     $routes->get('pengawasan', 'Kredit::pengawasan');
 });
