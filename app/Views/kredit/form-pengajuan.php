@@ -125,8 +125,8 @@
                 <div class="tab mb-3">
                     <div class="row g-3">
                         <div class="col-sm-4">
-                            <label class="form-label" for="cleave-number-format">Plafon Permohonan Kredit<span class="txt-danger">*</span></label>
-                            <input class="form-control" id="cleave-number-format" type="text" name="plafon" placeholder="Masukkan plafond kredit">
+                            <label class="form-label" for="plafon">Plafon Permohonan Kredit<span class="txt-danger">*</span></label>
+                            <input class="form-control" id="plafon" type="text" name="plafon" placeholder="Masukkan plafond kredit">
                             <div class="valid-feedback">Looks good!</div>
                         </div>
                         <div class="col-sm-4">

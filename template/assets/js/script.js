@@ -479,13 +479,28 @@
     caret_pos = updated_len - original_len + caret_pos;
     input[0].setSelectionRange(caret_pos, caret_pos);
   }
-  $("#regForm").on('submit', function (c) {
-    c.preventDefault();
-  })
   $("#jenis_nasabah").on('change', function (c) {
     let value = $(this).val()
     $("#keluargaRestuForm").toggle(value === '1');
     $("#sahabatRestuForm").toggle(value === '2');
   })
+  $("#plafon").on('keyup', function (c) {
+    $(this).val(formatRupiah($(this).val()))
+  })
 
+  function formatRupiah(angka, prefix) {
+    var number_string = angka.replace(/[^,\d]/g, '').toString(),
+      split = number_string.split(','),
+      sisa = split[0].length % 3,
+      rupiah = split[0].substr(0, sisa),
+      ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+      var separator = sisa ? '.' : '';
+      rupiah += separator + ribuan.join('.');
+    }
+
+    rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+    return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+  }
 })(jQuery);
