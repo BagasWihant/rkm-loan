@@ -34971,6 +34971,10 @@ body.dark-only .main-product-wrapper .product-body .product-search.input-group .
   border: 1px solid #374558;
   border-right: unset;
 }
+.form-control.invalid,
+.form-select.invalid{
+  background-color: #ffb9b9;
+}
 body.dark-only .our-product-wrapper {
   box-shadow: 0px 3px 17px rgba(113, 113, 137, 0.18);
 }

@@ -373,111 +373,119 @@
   });
 
   function number_format(number, decimals, dec_point, thousands_sep) {
-  // *     example: number_format(1234.56, 2, ',', ' ');
-  // *     return: '1 234,56'
-  number = (number + '').replace(',', '').replace(' ', '');
-  var n = !isFinite(+number) ? 0 : +number,
-    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-    s = '',
-    toFixedFix = function(n, prec) {
-      var k = Math.pow(10, prec);
-      return '' + Math.round(n * k) / k;
-    };
-  // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-  s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-  if (s[0].length > 3) {
-    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    // *     example: number_format(1234.56, 2, ',', ' ');
+    // *     return: '1 234,56'
+    number = (number + '').replace(',', '').replace(' ', '');
+    var n = !isFinite(+number) ? 0 : +number,
+      prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+      sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+      dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+      s = '',
+      toFixedFix = function (n, prec) {
+        var k = Math.pow(10, prec);
+        return '' + Math.round(n * k) / k;
+      };
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3) {
+      s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+      s[1] = s[1] || '';
+      s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
   }
-  if ((s[1] || '').length < prec) {
-    s[1] = s[1] || '';
-    s[1] += new Array(prec - s[1].length + 1).join('0');
+
+  $("input[data-type='currency']").on({
+    keyup: function () {
+      formatCurrency($(this));
+    },
+    blur: function () {
+      formatCurrency($(this), "blur");
+    }
+  });
+
+
+  function formatNumber(n) {
+    // format number 1000000 to 1,234,567
+    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
-  return s.join(dec);
-}
 
-$("input[data-type='currency']").on({
-  keyup: function() {
-    formatCurrency($(this));
-  },
-  blur: function() { 
-    formatCurrency($(this), "blur");
+
+  function formatCurrency(input, blur) {
+    // appends $ to value, validates decimal side
+    // and puts cursor back in right position.
+
+    // get input value
+    var input_val = input.val();
+
+    // don't validate empty input
+    if (input_val === "") { return; }
+
+    // original length
+    var original_len = input_val.length;
+
+    // initial caret position 
+    var caret_pos = input.prop("selectionStart");
+
+    // check for decimal
+    if (input_val.indexOf(".") >= 0) {
+
+      // get position of first decimal
+      // this prevents multiple decimals from
+      // being entered
+      var decimal_pos = input_val.indexOf(".");
+
+      // split number by decimal point
+      var left_side = input_val.substring(0, decimal_pos);
+      var right_side = input_val.substring(decimal_pos);
+
+      // add commas to left side of number
+      left_side = formatNumber(left_side);
+
+      // validate right side
+      right_side = formatNumber(right_side);
+
+      // On blur make sure 2 numbers after decimal
+      if (blur === "blur") {
+        right_side += "00";
+      }
+
+      // Limit decimal to only 2 digits
+      right_side = right_side.substring(0, 2);
+
+      // join number by .
+      input_val = "$" + left_side + "." + right_side;
+
+    } else {
+      // no decimal entered
+      // add commas to number
+      // remove all non-digits
+      input_val = formatNumber(input_val);
+      input_val = "$" + input_val;
+
+      // final formatting
+      if (blur === "blur") {
+        input_val += ".00";
+      }
+    }
+
+    // send updated string to input
+    input.val(input_val);
+
+    // put caret back in the right position
+    var updated_len = input_val.length;
+    caret_pos = updated_len - original_len + caret_pos;
+    input[0].setSelectionRange(caret_pos, caret_pos);
   }
-});
-
-
-function formatNumber(n) {
-// format number 1000000 to 1,234,567
-return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-}
-
-
-function formatCurrency(input, blur) {
-// appends $ to value, validates decimal side
-// and puts cursor back in right position.
-
-// get input value
-var input_val = input.val();
-
-// don't validate empty input
-if (input_val === "") { return; }
-
-// original length
-var original_len = input_val.length;
-
-// initial caret position 
-var caret_pos = input.prop("selectionStart");
-  
-// check for decimal
-if (input_val.indexOf(".") >= 0) {
-
-  // get position of first decimal
-  // this prevents multiple decimals from
-  // being entered
-  var decimal_pos = input_val.indexOf(".");
-
-  // split number by decimal point
-  var left_side = input_val.substring(0, decimal_pos);
-  var right_side = input_val.substring(decimal_pos);
-
-  // add commas to left side of number
-  left_side = formatNumber(left_side);
-
-  // validate right side
-  right_side = formatNumber(right_side);
-  
-  // On blur make sure 2 numbers after decimal
-  if (blur === "blur") {
-    right_side += "00";
-  }
-  
-  // Limit decimal to only 2 digits
-  right_side = right_side.substring(0, 2);
-
-  // join number by .
-  input_val = "$" + left_side + "." + right_side;
-
-} else {
-  // no decimal entered
-  // add commas to number
-  // remove all non-digits
-  input_val = formatNumber(input_val);
-  input_val = "$" + input_val;
-  
-  // final formatting
-  if (blur === "blur") {
-    input_val += ".00";
-  }
-}
-
-// send updated string to input
-input.val(input_val);
-
-// put caret back in the right position
-var updated_len = input_val.length;
-caret_pos = updated_len - original_len + caret_pos;
-input[0].setSelectionRange(caret_pos, caret_pos);
-}
+  $("#regForm").on('submit', function (c) {
+    c.preventDefault();
+  })
+  $("#jenis_nasabah").on('change', function (c) {
+    let value = $(this).val()
+    $("#keluargaRestuForm").toggle(value === '1');
+    $("#sahabatRestuForm").toggle(value === '2');
+  })
 
 })(jQuery);
