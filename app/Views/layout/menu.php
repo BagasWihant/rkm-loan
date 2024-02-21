@@ -24,7 +24,7 @@
                         </div>
                     </li>
                     <li class="sidebar-list"><i class="fa fa-thumb-tack"></i>
-                        <a class="sidebar-link sidebar-title link-nav" href="<?= base_url() ?>">
+                        <a class="sidebar-link sidebar-title link-nav" href="<?= base_url() ?>/">
                             <svg class="stroke-icon">
                                 <use href="<?= base_url() ?>/template/assets/svg/icon-sprite.svg#stroke-home"></use>
                             </svg>
